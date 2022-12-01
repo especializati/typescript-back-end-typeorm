@@ -1,6 +1,6 @@
 import {Request, response, Response} from 'express'
 import { Product } from '@/entities/product.entity'
-import AppDataSource from '@/connection'
+import AppDataSource from '@/database/connection'
 import { Repository } from 'typeorm'
 import { validate } from 'class-validator'
 
