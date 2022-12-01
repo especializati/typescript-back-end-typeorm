@@ -1,5 +1,5 @@
 import AppDataSource from "@/database/connection";
-import { CreateProductDTO } from "@/dto/create.product.dto";
+import { CreateProductDTO, UpdateProductDTO } from "@/dto/product.dto";
 import { Product } from "@/entities/product.entity";
 import { Repository } from "typeorm";
 
@@ -29,5 +29,18 @@ export class ProductRepository {
 
   async delete(id: string) {
     await this.repository.delete(id)
+  }
+
+  async update(input: UpdateProductDTO): Promise<Product|null> {
+    const product = await this.find(input.id)
+    if (!product) {
+      return null
+    }
+
+    product.name = input.name
+    product.description = input.description
+    product.weight = input.weight
+
+    return await this.repository.save(product)
   }
 }
