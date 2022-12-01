@@ -3,7 +3,7 @@ import { Product } from '@/entities/product.entity'
 import AppDataSource from '@/database/connection'
 import { validate } from 'class-validator'
 import { ProductRepository } from '@/repositories/product.repository'
-import CreateProductDTO from '@/dto/create.product.dto'
+import { CreateProductDTO } from '@/dto/create.product.dto'
 
 class ProductController {
   private productRepository: ProductRepository
@@ -23,12 +23,19 @@ class ProductController {
   create = async (request: Request, response: Response): Promise<Response> => {
     const {name, description, weight} = request.body
 
-    const dto = new CreateProductDTO
-    dto.name = name
-    dto.description = description
-    dto.weight = weight
+    const createProductDTO = new CreateProductDTO
+    createProductDTO.name = name
+    createProductDTO.description = description
+    createProductDTO.weight = weight
 
-    const productDb = await this.productRepository.create(dto)
+    const errors = await validate(createProductDTO)
+    if (errors.length > 0) {
+      return response.status(422).send({
+        error: errors
+      })
+    }
+
+    const productDb = await this.productRepository.create(createProductDTO)
 
     return response.status(201).send({
       data: productDb
