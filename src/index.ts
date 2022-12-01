@@ -1,10 +1,11 @@
+import 'module-alias/register'
 import bodyParser from 'body-parser'
 import express from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
 
 import './connection'
-import productController from './controllers/product.controller'
+import productController from '@/controllers/product.controller'
 import cors from 'cors'
 
 
